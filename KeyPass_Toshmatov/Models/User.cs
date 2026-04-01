@@ -6,9 +6,9 @@ namespace KeyPass_Toshmatov.Models
     {
         [Key]
         public int Id { get; set; }
-        public string Login {  get; set; }
-        public string Password { get; set; }
-        public DateTime? LastAuth { get; set; }
 
+        public string Login { get; set; } = string.Empty;
+        public string Password { get; set; } = string.Empty;
+        public DateTime? LastAuth { get; set; }
     }
 }

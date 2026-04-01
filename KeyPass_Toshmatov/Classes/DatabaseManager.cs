@@ -1,5 +1,6 @@
 ﻿using KeyPass_Toshmatov.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
 
 namespace KeyPass_Toshmatov.Classes
 {
@@ -8,16 +9,48 @@ namespace KeyPass_Toshmatov.Classes
         public DbSet<Storage> Storages { get; set; }
         public DbSet<User> Users { get; set; }
 
-        public DatabaseManager () =>
-            Database.EnsureCreated ();
+        // Конструктор для DI (миграции)
+        public DatabaseManager(DbContextOptions<DatabaseManager> options) : base(options)
+        {
+        }
+
+        // Конструктор для ручного использования
+        public DatabaseManager() : base()
+        {
+        }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseMySql(
-                "server=127.0.0.1;uid=student;pwd=;database=Storage;",
-                new MySqlServerVersion(new Version(8, 0, 11)));
-
+            if (!optionsBuilder.IsConfigured)
+            {
+                optionsBuilder.UseMySql(
+                    "server=127.0.0.1;port=3307;uid=root;pwd=;database=Storage;",
+                    new MySqlServerVersion(new Version(8, 0, 11)));
+            }
         }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            // Явная настройка связи
+            modelBuilder.Entity<Storage>()
+                .HasOne(s => s.User)
+                .WithMany()
+                .HasForeignKey(s => s.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+        }
+    }
+
+    // Фабрика для дизайн-времени (миграций)
+    public class DatabaseManagerFactory : IDesignTimeDbContextFactory<DatabaseManager>
+    {
+        public DatabaseManager CreateDbContext(string[] args)
+        {
+            var optionsBuilder = new DbContextOptionsBuilder<DatabaseManager>();
+            optionsBuilder.UseMySql(
+                "server=127.0.0.1;port=3307;uid=root;pwd=;database=Storage;",
+                new MySqlServerVersion(new Version(8, 0, 11)));
+
+            return new DatabaseManager(optionsBuilder.Options);
+        }
     }
 }

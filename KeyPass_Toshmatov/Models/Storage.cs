@@ -6,16 +6,18 @@ namespace KeyPass_Toshmatov.Models
     public class Storage
     {
         [Key]
-
         public int Id { get; set; }
 
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
         public string? Url { get; set; }
-        public string Login {  get; set; }
-        public string Password { get; set; }
+        public string Login { get; set; } = string.Empty;
+        public string Password { get; set; } = string.Empty;
 
-        [ForeignKey("UserId")]
-        public virtual User user { get; set; }
-        public int UserId { get; internal set; }
+        // Внешний ключ
+        public int UserId { get; set; }
+
+        // Навигационное свойство
+        [ForeignKey(nameof(UserId))]
+        public virtual User? User { get; set; }
     }
 }

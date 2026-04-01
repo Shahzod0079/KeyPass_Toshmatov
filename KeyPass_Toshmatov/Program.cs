@@ -12,8 +12,8 @@ builder.Services.AddSwaggerGen(options =>
         Title = "Инструментарий"
     });
 
-    string PathFile = Path.Combine(AppContext.BaseDirectory, "KeePass.xml");
-    options.IncludeXmlComments(PathFile);
+    //string PathFile = Path.Combine(AppContext.BaseDirectory, "KeePass.xml");
+    //options.IncludeXmlComments(PathFile);
 });
 
 var app = builder.Build();
