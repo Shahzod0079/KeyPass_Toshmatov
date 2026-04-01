@@ -18,5 +18,6 @@ namespace KeyPass_Toshmatov.Classes
                 new MySqlServerVersion(new Version(8, 0, 11)));
 
         }
+
     }
 }
