@@ -1,21 +1,22 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using KeyPass_Toshmatov.Models;
 using KeyPass_Toshmatov.Classes;
+using System.Linq;
 
 namespace KeyPass_Toshmatov.Controllers
 {
+    [Route("")]  // ← добавить базовый маршрут
     public class UserController : Controller
     {
         private DatabaseManager databaseManager;
 
         public UserController()
         {
-            this.databaseManager = this.databaseManager = new DatabaseManager();
+            this.databaseManager = new DatabaseManager();
         }
 
         [Route("login")]
         [HttpPost]
-
         public ActionResult Login([FromForm] string login, [FromForm] string password)
         {
             try
@@ -24,7 +25,7 @@ namespace KeyPass_Toshmatov.Controllers
                     .Where(x => x.Login == login && x.Password == password)
                     .FirstOrDefault();
 
-                if(AuthUser == null)
+                if (AuthUser == null)
                 {
                     return StatusCode(401);
                 }

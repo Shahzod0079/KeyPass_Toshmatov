@@ -1,4 +1,5 @@
-﻿using AppKeyPass.Models;
+﻿using AppKeyPass.Context;
+using AppKeyPass.Models;
 using AppKeyPass.Pages;
 using System.Windows;
 using System.Windows.Controls;
@@ -26,9 +27,9 @@ namespace AppKeyPass.Elements
 
         private void Update(object sender, System.Windows.RoutedEventArgs e)
         {
-            MainWindow.Init.OpenPages(new Pages.Add());
+            MainWindow.Init.OpenPages(new Pages.Add(this.Storage));
         }
-        private void Delet(object sender, System.Windows.RoutedEventArgs e)
+        private void Delete(object sender, System.Windows.RoutedEventArgs e)
         {
             StorageContext.Delete(Storage.Id);
             this.Main.StorageList.Children.Remove(this);

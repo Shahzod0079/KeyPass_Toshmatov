@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using AppKeyPass.Contexts;
+using AppKeyPass.Context;
 
 namespace AppKeyPass.Pages
 {
@@ -13,7 +13,7 @@ namespace AppKeyPass.Pages
         }
         public async Task Auth(string login,  string password)
         {
-            string? Token = await UserContext.Login(login, password);
+            string Token = await UserContext.Login(login, password);
             if (Token == null)
             {
                 MessageBox.Show("Логин и пароль указаны не верно");

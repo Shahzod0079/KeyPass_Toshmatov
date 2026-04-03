@@ -48,6 +48,8 @@ namespace KeyPass_Toshmatov.Controllers
         [HttpPost]
         public ActionResult Add([FromHeader] string token, [FromBody] StorageDto storageDto)
         {
+            System.Diagnostics.Debug.WriteLine($"Add called. Token: {token}");
+            System.Diagnostics.Debug.WriteLine($"Storage: {storageDto?.Name}");
             try
             {
                 int? IdUser = JwtToken.GetUserIdFromToken(token);

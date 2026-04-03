@@ -1,32 +1,46 @@
-﻿using System.IO.Ports;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Controls;
-using System.Windows.Controls;
+using AppKeyPass.Context;
 using AppKeyPass.Models;
-
-
 
 namespace AppKeyPass.Pages
 {
-
     public partial class Main : Page
     {
         public Main()
         {
             InitializeComponent();
-            GetStorage;
+            Loaded += async (s, e) => await GetStorage();
         }
 
         public async Task GetStorage()
         {
             List<Storage> Storages = await StorageContext.Get();
-            StorageList.Children.Clear();
-            foreach(Storage Storage in Storages)
+
+            if (Storages == null)
             {
-                StorageList.Children.Add(new Elements.Item(Storage, this));
-            }    
+                Storages = new List<Storage>();
+            }
+
+            if (StorageList != null)
+            {
+                StorageList.Children.Clear();
+                foreach (Storage Storage in Storages)
+                {
+                    var item = new Elements.Item(Storage, this);
+                    StorageList.Children.Add(item);
+                }
+            }
         }
+
         private void OpenPageAdd(object sender, System.Windows.RoutedEventArgs e) =>
-            MainWindow.Init.OpenPages(new Pages.Add());
+            MainWindow.Init.OpenPages(new Add());
+
+        public void RefreshList()
+        {
+            _ = GetStorage();
+        }
     }
+    
 }

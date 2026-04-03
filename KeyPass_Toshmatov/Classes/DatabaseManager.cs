@@ -9,12 +9,10 @@ namespace KeyPass_Toshmatov.Classes
         public DbSet<Storage> Storages { get; set; }
         public DbSet<User> Users { get; set; }
 
-        // Конструктор для DI (миграции)
         public DatabaseManager(DbContextOptions<DatabaseManager> options) : base(options)
         {
         }
 
-        // Конструктор для ручного использования
         public DatabaseManager() : base()
         {
         }
@@ -31,7 +29,6 @@ namespace KeyPass_Toshmatov.Classes
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // Явная настройка связи
             modelBuilder.Entity<Storage>()
                 .HasOne(s => s.User)
                 .WithMany()
@@ -40,7 +37,6 @@ namespace KeyPass_Toshmatov.Classes
         }
     }
 
-    // Фабрика для дизайн-времени (миграций)
     public class DatabaseManagerFactory : IDesignTimeDbContextFactory<DatabaseManager>
     {
         public DatabaseManager CreateDbContext(string[] args)
