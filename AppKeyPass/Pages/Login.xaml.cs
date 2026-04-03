@@ -40,5 +40,9 @@ namespace AppKeyPass.Pages
             Auth(tbLogin.Text, tbPassword.Password);   
 
         }
+        private void BtnRegister(object sender, RoutedEventArgs e)
+        {
+            MainWindow.Init.OpenPages(new Register());
+        }
     }
 }

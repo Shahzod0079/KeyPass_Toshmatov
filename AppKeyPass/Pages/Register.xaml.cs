@@ -1,28 +1,45 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using AppKeyPass.Context;
 
 namespace AppKeyPass.Pages
 {
-    /// <summary>
-    /// Логика взаимодействия для Register.xaml
-    /// </summary>
     public partial class Register : Page
     {
         public Register()
         {
             InitializeComponent();
+        }
+
+        private async void BtnRegister(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrEmpty(tbLogin.Text))
+            {
+                MessageBox.Show("Введите логин");
+                return;
+            }
+            if (string.IsNullOrEmpty(tbPassword.Password))
+            {
+                MessageBox.Show("Введите пароль");
+                return;
+            }
+            if (tbPassword.Password != tbConfirmPassword.Password)
+            {
+                MessageBox.Show("Пароли не совпадают");
+                return;
+            }
+
+            string token = await UserContext.Register(tbLogin.Text, tbPassword.Password);
+            if (token != null)
+            {
+                MainWindow.Token = token;
+                MainWindow.Init.OpenPages(new Main());
+            }
+        }
+
+        private void BtnBack(object sender, RoutedEventArgs e)
+        {
+            MainWindow.Init.OpenPages(new Login());
         }
     }
 }

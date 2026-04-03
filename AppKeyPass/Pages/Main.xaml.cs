@@ -41,6 +41,12 @@ namespace AppKeyPass.Pages
         {
             _ = GetStorage();
         }
+
+        private void BtnLogout(object sender, System.Windows.RoutedEventArgs e)
+        {
+            MainWindow.Token = null;
+            MainWindow.Init.OpenPages(new Login());
+        }
     }
     
 }
