@@ -52,6 +52,40 @@ namespace KeyPass_Toshmatov.Controllers
             {
                 return StatusCode(501, exp.Message);
             }
+            
+        }
+        [Route("register")]
+        [HttpPost]
+        public ActionResult Register([FromForm] string login, [FromForm] string password)
+        {
+            try
+            {
+                //Проверяем существует ли пользователь
+                var existingUser = databaseManager.Users
+                    .FirstOrDefault(x => x.Login == login);
+
+                if(existingUser != null)
+                {
+                    return StatusCode(400, "Пользователь уже существует");
+                }
+                //Создаем нового пользователя с хешированным паролем
+                User newUser = new User
+                {
+                    Login = login,
+                    Password = HashPassword(password),
+                    LastAuth = DateTime.Now
+                };
+                databaseManager.Users.Add(newUser);
+                databaseManager.SaveChanges();
+
+                //Генерация токена
+                string Token = JwtToken.Generate(newUser);
+                return Ok(new { token = Token });
+            }
+            catch (Exception exp)
+            {
+                return StatusCode(501, exp.Message);
+            }
         }
     }
 }
